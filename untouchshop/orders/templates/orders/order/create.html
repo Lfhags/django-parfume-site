@@ -1,0 +1,57 @@
+{% extends "shop/base.html" %}
+
+{% block title %}
+  Checkout
+{% endblock %}
+
+{% block content %}
+  <div class="container py-4">
+    <h1 class="main-title mb-4 text-center font-elegant text-brown" style="font-size:2.1rem;">Оформлення замовлення</h1>
+    <div class="order-info bg-beige rounded-4 shadow-sm p-4 mb-4">
+      <h3 class="font-elegant text-brown mb-3" style="font-size:1.3rem;">Ваше замовлення</h3>
+      <ul class="list-unstyled mb-3">
+        {% for item in cart %}
+          <li class="mb-2 d-flex justify-content-between align-items-center">
+            <span>{{ item.quantity }}x <span class="fw-semibold">{{ item.product.name }}</span></span>
+            <span class="text-danger-emphasis fw-bold">${{ item.total_price }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <p class="fw-bold text-end">Всього: <span class="text-danger-emphasis">${{ cart.get_total_price }}</span></p>
+    </div>
+    <form method="post" class="order-form bg-beige rounded-4 shadow-sm p-4 mx-auto" style="max-width:480px;">
+      {% csrf_token %}
+      <div class="row g-3">
+        <div class="col-12">
+          <label for="id_first_name" class="form-label">First name</label>
+          {{ form.first_name }}
+        </div>
+        <div class="col-12">
+          <label for="id_last_name" class="form-label">Last name</label>
+          {{ form.last_name }}
+        </div>
+        <div class="col-12">
+          <label for="id_email" class="form-label">Email</label>
+          {{ form.email }}
+        </div>
+        <div class="col-12">
+          <label for="id_address" class="form-label">Address</label>
+          {{ form.address }}
+        </div>
+        <div class="col-12">
+          <label for="id_postal_code" class="form-label">Postal code</label>
+          {{ form.postal_code }}
+        </div>
+        <div class="col-12">
+          <label for="id_city" class="form-label">City</label>
+          {{ form.city }}
+        </div>
+      </div>
+      <div class="text-end mt-4">
+        <button type="submit" class="btn btn-brown btn-lg px-4 d-inline-flex align-items-center gap-2 shadow-sm" style="font-weight:600;letter-spacing:0.02em;">
+          <i class="bi bi-cart"></i> Оформити замовлення
+        </button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

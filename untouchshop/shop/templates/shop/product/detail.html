@@ -1,0 +1,50 @@
+{% extends "shop/base.html" %}
+{% load static %}
+
+{% block title %}
+  {{ product.name }}
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="main-title mb-4 text-center font-elegant text-brown" style="font-size:2.2rem;">{{ product.name }}</h1>
+  <div class="row g-5 align-items-center justify-content-center">
+    <div class="col-md-5 text-center">
+      <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "img/no_image.png" %}{% endif %}" class="img-fluid rounded shadow product-img-premium" style="max-height:360px;object-fit:contain;width:100%;" alt="{{ product.name }}">
+    </div>
+    <div class="col-md-7">
+      <div class="card p-4 border-0 shadow-sm product-card-premium bg-beige rounded-4">
+        <div class="mb-3">
+          <span class="sidebar-cat-link small text-brown">{{ product.category }}</span>
+        </div>
+        <div class="price mb-3 display-6 fw-bold text-danger-emphasis" style="font-size:1.3rem;">${{ product.price }}</div>
+        <form action="{% url 'cart:cart_add' product.id %}" method="post" class="mb-3">
+          {{ cart_product_form }}
+          {% csrf_token %}
+          <button type="submit" class="btn btn-brown btn-lg px-4"><i class="bi bi-cart"></i> В кошик</button>
+        </form>
+        <div class="product-description mb-2 text-secondary small" style="min-height:2.2em;max-height:7em;overflow:hidden;">{{ product.description|linebreaks }}</div>
+      </div>
+      {% if recommended_products %}
+        <div class="mt-4">
+          <h4 class="mb-3 font-elegant text-brown">Рекомендуємо також</h4>
+          <div class="row row-cols-2 row-cols-md-3 g-3">
+          {% for p in recommended_products %}
+            <div class="col">
+              <div class="card h-100 text-center product-card-premium bg-beige rounded-4">
+                <a href="{{ p.get_absolute_url }}">
+                  <img src="{% if p.image %}{{ p.image.url}}{% else %}{% static 'img/no_image.png' %}{% endif %}" class="img-fluid p-2 product-img-premium" style="max-height:90px;object-fit:contain;width:100%;" alt="{{ p.name }}">
+                </a>
+                <div class="card-body p-2">
+                  <a href="{{ p.get_absolute_url }}" class="small text-decoration-none text-brown font-elegant">{{ p.name }}</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
